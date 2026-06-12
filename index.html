@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noghte Studio | استودیو نقطه</title>
+    <style>
+        /* =========================================
+           1. CORE TYPOGRAPHY & VARIABLES
+           ========================================= */
+        @font-face {
+            font-family: 'Abar';
+            src: url('https://cdn.jsdelivr.net/gh/Mm-hosseini1/my_web_fonts@master/Abar-VF.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --ink: #121212;
+            --stone-ash: #F5F5F3;
+            --stone-dark: #D4D4D0;
+            --midnight-azure: #0A192F;
+            --pure-white: #FFFFFF;
+            
+            --font-primary: 'Abar', system-ui, -apple-system, sans-serif;
+            --line-weight: 1.5px;
+            --premium-ease: cubic-bezier(0.25, 1, 0.5, 1);
+            --section-pad: 80px 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background-color: var(--midnight-azure); color: var(--stone-ash); }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--ink);
+            color: var(--stone-ash);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        
+        .core-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background-color: var(--pure-white);
+            border-radius: 50%;
+            margin-left: 12px;
+        }
+
+        .section-header {
+            display: flex; align-items: center;
+            font-size: 14px; letter-spacing: 1px;
+            text-transform: uppercase; color: var(--stone-dark);
+            margin-bottom: 40px; opacity: 0.8;
+        }
+
+        .section-header::after {
+            content: ''; flex-grow: 1; height: var(--line-weight);
+            background-color: var(--stone-dark); margin-right: 20px; opacity: 0.3;
+        }
+
+        /* =========================================
+           2. HEADER & NAVIGATION (MOBILE FIRST)
+           ========================================= */
+        header {
+            position: fixed; top: 0; width: 100%;
+            padding: 20px; 
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: var(--line-weight) solid rgba(245, 245, 243, 0.1);
+            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .logo {
+            font-size: 24px; font-weight: normal;
+            display: flex; align-items: baseline; gap: 4px;
+            position: relative;
+        }
+
+        .logo-dot {
+            width: 10px; height: 10px;
+            background-color: var(--pure-white);
+            border-radius: 50%;
+            position: relative;
+            top: -2px;
+        }
+
+        .desktop-nav { display: none; }
+        .header-cta { display: none; }
+        
+        .hamburger {
+            display: flex; flex-direction: column; gap: 6px;
+            cursor: pointer; z-index: 1001;
+        }
+        .hamburger span {
+            display: block; width: 30px; height: var(--line-weight);
+            background: var(--stone-ash); transition: 0.3s var(--premium-ease);
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        .mobile-menu {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--ink); z-index: 999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            gap: 40px; font-size: 32px;
+            transform: translateY(-100%); transition: transform 0.6s var(--premium-ease);
+        }
+        .mobile-menu.active { transform: translateY(0); }
+
+        /* =========================================
+           3. HERO SECTION (MOBILE FIRST)
+           ========================================= */
+        .hero {
+            min-height: 100vh;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-bg-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: 60px 60px;
+            background-image: linear-gradient(to right, rgba(245, 245, 243, 0.04) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(245, 245, 243, 0.04) 1px, transparent 1px);
+            z-index: -1;
+        }
+
+        .hero-content { margin-bottom: 40px; }
+        
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 16px; border: var(--line-weight) solid rgba(245,245,243,0.2);
+            border-radius: 40px; font-size: 12px; margin-bottom: 32px;
+        }
+        .hero-badge .status-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background-color: #4CAF50; box-shadow: 0 0 10px #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 12vw, 90px);
+            line-height: 1.1; margin-bottom: 24px; font-weight: normal;
+        }
+
+        .hero-title em {
+            font-style: normal; color: transparent;
+            -webkit-text-stroke: 1.5px var(--stone-ash);
+        }
+
+        .hero-desc {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--stone-dark); opacity: 0.8;
+            max-width: 500px;
+        }
+
+        .hero-visual {
+            width: 100%; max-width: 400px; margin: 0 auto;
+            position: relative; aspect-ratio: 1;
+        }
+        
+        .glass-card {
+            width: 100%; height: 100%;
+            background: rgba(10, 25, 47, 0.2);
+            border: var(--line-weight) solid rgba(245, 245, 243, 0.1);
+            backdrop-filter: blur(12px);
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 24px; position: absolute;
+            top: 0; left: 0;
+            transform: rotate(-3deg); transition: transform 0.5s var(--premium-ease);
+        }
+        .glass-card:hover { transform: rotate(0deg) scale(1.02); background: rgba(10, 25, 47, 0.4); }
+        
+        .glass-header { font-family: monospace; font-size: 12px; color: var(--stone-ash); display: flex; justify-content: space-between; border-bottom: 1px solid rgba(245,245,243,0.2); padding-bottom: 12px; }
+        .glass-body { text-align: left; direction: ltr; font-family: monospace; font-size: 14px; opacity: 0.7; line-height: 1.8; }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.5; }
+        }
+
+        /* =========================================
+           4. ZERO-POINT METHODOLOGY
+           ========================================= */
+        .methodology { padding: var(--section-pad); background: var(--ink); border-top: var(--line-weight) solid rgba(245,245,243,0.1); }
+        .method-grid { display: grid; gap: 60px; margin-top: 60px; }
+        .method-step { display: flex; flex-direction: column; gap: 24px; padding-right: 24px; border-right: var(--line-weight) solid rgba(245,245,243,0.1); position: relative; }
+        .method-step::before { content: ''; position: absolute; top: 0; right: -5px; width: 9px; height: 9px; background: var(--ink); border: var(--line-weight) solid var(--stone-ash); border-radius: 50%; }
+        .shape-container { width: 60px; height: 60px; display: grid; place-items: center; margin-bottom: 16px; }
+        .shape-chaos { width: 40px; height: 40px; border: var(--line-weight) dashed var(--stone-dark); border-radius: 30%; transform: rotate(20deg); }
+        .shape-structure { width: 40px; height: 40px; border: var(--line-weight) solid var(--stone-ash); position: relative; }
+        .shape-structure::after { content:''; position:absolute; top:50%; left:-10px; right:-10px; height:var(--line-weight); background:var(--stone-ash); }
+        .shape-point { width: 24px; height: 24px; background: var(--pure-white); border-radius: 50%; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .method-title { font-size: 24px; font-weight: normal; margin-bottom: 8px; }
+        .method-desc { font-size: 15px; color: var(--stone-dark); opacity: 0.8; }
+
+        /* =========================================
+           5. PHILOSOPHY & SERVICES
+           ========================================= */
+        .philosophy { padding: var(--section-pad); background-color: var(--stone-ash); color: var(--ink); }
+        .philosophy .section-header { color: var(--ink); }
+        .philosophy .section-header::after { background-color: var(--ink); }
+        .philosophy .core-dot { background-color: var(--ink); }
+        .philosophy-text { font-size: clamp(28px, 6vw, 48px); line-height: 1.4; margin-bottom: 30px; }
+
+        .services { padding: var(--section-pad); }
+        .service-grid { display: grid; gap: 24px; }
+        .service-card { border: var(--line-weight) solid rgba(245, 245, 243, 0.1); padding: 40px 32px; transition: all 0.4s var(--premium-ease); }
+        .service-card:hover { border-color: var(--stone-ash); background: rgba(245,245,243,0.02); transform: translateY(-4px); }
+        .service-num { font-family: monospace; font-size: 12px; color: var(--stone-dark); margin-bottom: 24px; }
+        .service-title { font-size: 24px; margin-bottom: 16px; font-weight: normal; }
+        .service-desc { font-size: 15px; color: var(--stone-dark); opacity: 0.8; line-height: 1.6; }
+        .service-card.highlight { background: var(--midnight-azure); border-color: var(--midnight-azure); }
+        .service-card.highlight:hover { background: #0c1e38; }
+
+        /* =========================================
+           6. PORTFOLIO (MOBILE FIRST = 1 COLUMN)
+           ========================================= */
+        .portfolio { padding: var(--section-pad); }
+        .portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .project-img { position: relative; overflow: hidden; aspect-ratio: 4/5; margin-bottom: 20px; }
+        .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--premium-ease); filter: grayscale(100%); }
+        .project-card:hover .project-img img { transform: scale(1.05); filter: grayscale(0%); }
+        .project-meta { display: flex; justify-content: space-between; align-items: baseline; border-bottom: var(--line-weight) solid rgba(245, 245, 243, 0.2); padding-bottom: 16px; }
+
+        /* =========================================
+           7. FAQS & CONTACT
+           ========================================= */
+        .faqs { padding: var(--section-pad); background-color: var(--stone-ash); color: var(--ink); }
+        .faqs .section-header { color: var(--ink); }
+        .faqs .section-header::after { background-color: var(--ink); }
+        .faqs .core-dot { background-color: var(--ink); }
+        details { border-bottom: var(--line-weight) solid rgba(18, 18, 18, 0.2); padding: 24px 0; }
+        summary { font-size: 20px; font-weight: normal; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; font-size: 24px; transition: transform 0.3s ease; }
+        details[open] summary::after { transform: rotate(45deg); }
+        .faq-answer { padding-top: 16px; font-size: 16px; opacity: 0.8; line-height: 1.8; }
+
+        .contact-section { padding: var(--section-pad); border-top: var(--line-weight) solid rgba(245,245,243,0.1); }
+        .contact-title { font-size: clamp(32px, 6vw, 64px); margin-bottom: 24px; line-height: 1.1; }
+        .form-container { background: rgba(245,245,243,0.02); border: var(--line-weight) solid rgba(245,245,243,0.1); padding: 40px 24px; margin-top: 40px; }
+        .form-group { margin-bottom: 40px; position: relative; }
+        .form-input, .form-select { width: 100%; background: transparent; border: none; border-bottom: var(--line-weight) solid rgba(245, 245, 243, 0.3); color: var(--stone-ash); font-family: var(--font-primary); font-size: 16px; padding: 16px 0; transition: border-color 0.3s ease; border-radius: 0; appearance: none; }
+        .form-select option { background: var(--ink); color: var(--stone-ash); }
+        .form-input:focus, .form-select:focus { outline: none; border-bottom-color: var(--pure-white); }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+        .submit-btn { display: inline-flex; align-items: center; justify-content: space-between; background: var(--stone-ash); color: var(--ink); font-family: var(--font-primary); font-size: 16px; border: none; padding: 20px 32px; width: 100%; cursor: pointer; transition: opacity 0.3s ease; }
+        .submit-btn:hover { opacity: 0.8; }
+
+        footer { text-align: center; padding: 40px; font-size: 12px; opacity: 0.5; border-top: var(--line-weight) solid rgba(245,245,243,0.1); }
+
+        /* =========================================
+           8. DESKTOP BREAKPOINTS (STRICT GRID RULES)
+           ========================================= */
+        @media (min-width: 1024px) {
+            :root { --section-pad: 140px 80px; }
+            
+            /* HEADER: Hide Hamburger strictly, show Desktop Nav */
+            header { display: grid; grid-template-columns: 1fr auto 1fr; padding: 24px 60px; }
+            .logo { justify-self: start; font-size: 26px; }
+            .hamburger { display: none !important; }
+            .desktop-nav { display: flex !important; gap: 48px; font-size: 14px; letter-spacing: 1px; opacity: 0.8; justify-self: center; align-items: center; }
+            .desktop-nav a:hover { color: var(--pure-white); opacity: 1; }
+            .header-cta { 
+                display: block !important; justify-self: end; 
+                border: var(--line-weight) solid var(--stone-ash); 
+                padding: 10px 24px; border-radius: 40px; font-size: 14px; 
+                transition: all 0.3s ease;
+            }
+            .header-cta:hover { background: var(--stone-ash); color: var(--ink); }
+
+            /* HERO: Strict CSS Grid for precise desktop layout */
+            .hero { 
+                display: grid;
+                grid-template-columns: 1.2fr 1fr; /* Text right (RTL), Visual left */
+                gap: 80px;
+                align-items: center;
+                min-height: 100vh;
+                padding-top: 100px; /* Offset for header */
+            }
+            .hero-content { margin-bottom: 0; max-width: 100%; }
+            .hero-visual { max-width: 100%; margin: 0; }
+            
+            /* Structural Sections */
+            .philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: center; }
+            .service-grid { grid-template-columns: repeat(3, 1fr); }
+            
+            /* Methodology Grid */
+            .method-grid { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+            .method-step { border-right: none; border-top: var(--line-weight) solid rgba(245,245,243,0.1); padding-right: 0; padding-top: 40px; }
+            .method-step::before { top: -5px; right: 0; }
+            
+            /* PORTFOLIO: Strict 2 Columns for Desktop */
+            .portfolio-grid { 
+                grid-template-columns: repeat(2, 1fr) !important; 
+                gap: 60px; 
+            }
+            .project-img { aspect-ratio: 16/10; }
+
+            /* Contact Form */
+            .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: start; }
+            .form-container { margin-top: 0; padding: 60px 48px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">استودیو نقطه<div class="logo-dot"></div></div>
+        
+        <nav class="desktop-nav">
+            <a href="#philosophy">فلسفه ما</a>
+            <a href="#services">تخصص‌ها</a>
+            <a href="#portfolio">آثار منتخب</a>
+        </nav>
+
+        <a href="#contact" class="header-cta">شروع همکاری</a>
+
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#philosophy" onclick="toggleMenu()">فلسفه ما</a>
+        <a href="#services" onclick="toggleMenu()">تخصص‌ها</a>
+        <a href="#portfolio" onclick="toggleMenu()">آثار منتخب</a>
+        <a href="#contact" onclick="toggleMenu()">شروع همکاری</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="status-dot"></span>
+                آماده پذیرش پروژه‌های جدید
+            </div>
+            <h1 class="hero-title">
+                خلق تمایز از<br>
+                <em>اینجا</em> آغاز می‌شود.
+            </h1>
+            <p class="hero-desc">
+                استودیو نقطه؛ مقصد کارفرماهای سطح بالا برای خلق هویتی مینیمال، مدرن و بااصالت. تلفیق مهندسی نرم‌افزار و هنر طراحی.
+            </p>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card">
+                <div class="glass-header">
+                    <span>NOGHTE_SYS</span>
+                    <span>v.3.0.0</span>
+                </div>
+                <div class="glass-body">
+                    > INITIATING BLUEPRINT...<br>
+                    > PIXEL GRID: ALIGNED [100%]<br>
+                    > ARCHITECTURE: SCALABLE<br>
+                    > DESIGN SYSTEM: RENDERED<br>
+                    <br>
+                    <span style="color: var(--pure-white);">STATUS: OPTIMAL</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="philosophy" class="philosophy">
+        <div class="philosophy-grid">
+            <div>
+                <div class="section-header"><span class="core-dot"></span>فلسفه ما // 01</div>
+                <h2 class="philosophy-text">سکوتِ مهندسی‌شده در یک گالری هنر.</h2>
+            </div>
+            <div>
+                <p style="font-size: 18px; opacity: 0.8;">
+                    ما معتقدیم که زیبایی در سادگی، و قدرت در جزئیات است. رسیدن به نقطه صفر، جایی که هیچ چیز اضافه‌ای وجود ندارد تا پیام برند شما با بالاترین میزان شفافیت و وقار منتقل شود.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="section-header"><span class="core-dot"></span>تخصص‌ها // 02</div>
+        <div class="service-grid">
+            <div class="service-card">
+                <div class="service-num">01 / UI-UX</div>
+                <h3 class="service-title">طراحی محصول</h3>
+                <p class="service-desc">خلق رابط‌های کاربری مینیمال با تمرکز وسواس‌گونه بر تجربه کاربر.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-num">02 / FRONTEND</div>
+                <h3 class="service-title">توسعه فرانت‌اند</h3>
+                <p class="service-desc">کدنویسی معماری‌شده، تمیز و واکنش‌گرا با بالاترین پرفورمنس.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-num">03 / BACKEND</div>
+                <h3 class="service-title">توسعه بک‌اند</h3>
+                <p class="service-desc">طراحی دیتابیس‌های مقیاس‌پذیر و ایجاد APIهای ایمن و سریع.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-num">04 / BRANDING</div>
+                <h3 class="service-title">هویت بصری</h3>
+                <p class="service-desc">طراحی گایدلاین جامع برای خلق یک کاراکتر ماندگار سازمانی.</p>
+            </div>
+            <div class="service-card highlight">
+                <div class="service-num" style="color:var(--stone-ash);">05 / ZERO TO ONE</div>
+                <h3 class="service-title">پکیج جامع توسعه</h3>
+                <p class="service-desc" style="color:var(--stone-ash);">صفر تا صد دیزاین، برنامه‌نویسی و استقرار یکپارچه پروژه شما.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-num">06 / SUPPORT</div>
+                <h3 class="service-title">پشتیبانی و نگهداری</h3>
+                <p class="service-desc">حفظ پایداری، امنیت و توسعه مستمر فیچرها پس از لانچ.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="methodology">
+        <div class="section-header"><span class="core-dot"></span>معماری صفر تا یک // 03</div>
+        <h2 style="font-size: 32px; font-weight: normal; margin-bottom: 20px;">متدولوژی استودیو نقطه</h2>
+        <div class="method-grid">
+            <div class="method-step">
+                <div class="shape-container"><div class="shape-chaos"></div></div>
+                <h3 class="method-title">۱. تحلیل و ساختارشکنی</h3>
+                <p class="method-desc">ورود به عمق نیازهای سازمان شما، حذف پیچیدگی‌های ذهنی و کشف هسته اصلی ارزشی که باید ارائه شود.</p>
+            </div>
+            <div class="method-step">
+                <div class="shape-container"><div class="shape-structure"></div></div>
+                <h3 class="method-title">۲. معماری و گریدلاین</h3>
+                <p class="method-desc">طراحی وایرفریم‌ها، منطق سیستم و چیدمان هندسی. پایه‌ریزی یک ساختار مستحکم و مقیاس‌پذیر برای کدنویسی.</p>
+            </div>
+            <div class="method-step">
+                <div class="shape-container"><div class="shape-point"></div></div>
+                <h3 class="method-title">۳. خلوص و کمال بصری</h3>
+                <p class="method-desc">رسیدن به نقطه صفر. اجرای دیزاین سیستم پریمیوم، کدنویسی بی‌نقص و خلق محصولی که در عین کارآمدی، یک اثر هنری است.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <div class="section-header"><span class="core-dot"></span>آثار منتخب // 04</div>
+        <div class="portfolio-grid">
+            <a href="/fintech-design-system.html" class="project-card">
+                <div class="project-img"><img src="https://picsum.photos/800/1000?random=1" alt="پروژه اول"></div>
+                <div class="project-meta">
+                    <h3 style="font-size: 24px; font-weight: normal;">سیستم دیزاین فین‌تک</h3>
+                    <span style="font-family: monospace; font-size: 12px; color: var(--stone-dark);">UI / UX</span>
+                </div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="project-img"><img src="https://picsum.photos/800/1000?random=2" alt="پروژه دوم"></div>
+                <div class="project-meta">
+                    <h3 style="font-size: 24px; font-weight: normal;">پلتفرم تجارت الکترونیک</h3>
+                    <span style="font-family: monospace; font-size: 12px; color: var(--stone-dark);">FULL STACK</span>
+                </div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="project-img"><img src="https://picsum.photos/800/1000?random=3" alt="پروژه سوم"></div>
+                <div class="project-meta">
+                    <h3 style="font-size: 24px; font-weight: normal;">پورتال سازمانی معماری</h3>
+                    <span style="font-family: monospace; font-size: 12px; color: var(--stone-dark);">WEB DEV</span>
+                </div>
+            </a>
+            <a href="#" class="project-card">
+                <div class="project-img"><img src="https://picsum.photos/800/1000?random=4" alt="پروژه چهارم"></div>
+                <div class="project-meta">
+                    <h3 style="font-size: 24px; font-weight: normal;">هویت بصری استارتاپ</h3>
+                    <span style="font-family: monospace; font-size: 12px; color: var(--stone-dark);">BRANDING</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="faqs">
+        <div class="section-header"><span class="core-dot"></span>سوالات متداول کارفرمایان // 05</div>
+        <div style="max-width: 900px; margin: 0 auto;">
+            <details>
+                <summary>معماری و توسعه اختصاصی استودیو نقطه چه مزیتی نسبت به سیستم‌های آماده دارد؟</summary>
+                <div class="faq-answer">توسعه اختصاصی (Custom Build) به معنای خلق کدی است که دقیقاً برای نیاز، پرفورمنس و امنیت مقیاس شما نوشته شده است. هیچ کد اضافه‌ای بارگذاری نمی‌شود، طراحی ۱۰۰٪ منحصر‌به‌فرد است و محدودیت‌های پلتفرم‌های آماده مانع توسعه آینده کسب‌وکار شما نخواهد شد.</div>
+            </details>
+            <details>
+                <summary>آیا پس از اتمام پروژه، سورس‌کد کامل در اختیار کارفرما قرار می‌گیرد؟</summary>
+                <div class="faq-answer">بله، استودیو نقطه معتقد به شفافیت کامل است. تمامی مالکیت فکری (IP)، کدهای ساختاریافته در ریپازیتوری‌های استاندارد و فایل‌های سورس طراحی در زمان تحویل نهایی به صورت کامل و مستند به کارفرما منتقل می‌شود.</div>
+            </details>
+            <details>
+                <summary>روند ارتباط و گزارش‌دهی پیشرفت پروژه در طول توسعه چگونه است؟</summary>
+                <div class="faq-answer">ما از یک ساختار مدیریت پروژه مدرن (Agile) استفاده می‌کنیم. شما از طریق پلتفرم‌های ترکینگ به صورت مستمر در جریان کار هستید و جلسات ارائه محصول (Demo) در پایان هر فاز کلیدی با شما برگزار خواهد شد.</div>
+            </details>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="contact-wrapper">
+            <div style="padding-top: 20px;">
+                <div class="section-header"><span class="core-dot"></span>آغاز همکاری // 06</div>
+                <h2 class="contact-title">پروژه بعدی خود را<br>با ما مهندسی کنید.</h2>
+                <p style="margin-bottom: 40px; opacity: 0.8; font-size: 18px;">
+                    فرم درخواست را تکمیل کنید تا تیم ما جهت برنامه‌ریزی جلسه مشاوره اولیه در سریع‌ترین زمان با شما تماس بگیرد.
+                </p>
+            </div>
+            
+            <div class="form-container">
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="نام سازمان / نام و نام خانوادگی" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="آدرس ایمیل" dir="rtl" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-input" placeholder="شماره تماس مستقیم" dir="rtl" required>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-select" required>
+                            <option value="" disabled selected>نوع خدمات مورد نیاز</option>
+                            <option value="full_package">پکیج جامع توسعه (صفر تا صد)</option>
+                            <option value="ui_ux">طراحی محصول (UI/UX)</option>
+                            <option value="frontend">توسعه فرانت‌اند</option>
+                            <option value="backend">توسعه بک‌اند</option>
+                            <option value="branding">برندینگ و هویت بصری</option>
+                            <option value="support">پشتیبانی و نگهداری</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-input" placeholder="شرح مختصری از پروژه، ددلاین مدنظر و بودجه تخمینی..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        ارسال درخواست
+                        <svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.5px;">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 NOGHTE STUDIO. PURE ARCHITECTURE FOR THE WEB.
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            // Only trigger on mobile view where hamburger is visible
+            if (window.innerWidth < 1024) {
+                const hamburger = document.getElementById('hamburger');
+                const mobileMenu = document.getElementById('mobileMenu');
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
